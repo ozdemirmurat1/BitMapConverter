@@ -12,9 +12,9 @@
 
                 string hexString = Console.ReadLine()!.Replace(" ", "");
 
-                ulong num = HexadecimalToLong(hexString);
+                string binaryString = HexadecimalToLong(hexString);
 
-                string binaryString = BinaryValue(num);
+                //string binaryString = BinaryValue(num);
 
                 Print(binaryString,1);
 
@@ -22,13 +22,19 @@
                 {
                     Console.WriteLine("There is exist second bitmap");
 
-                    Console.Write("Please Enter Second Bitmap Value:");
+                    Console.Write("Please Enter Second Bitmap Value or exit(Y):");
 
                     string secondHexString = Console.ReadLine()!.Replace(" ", "");
 
-                    ulong num2 = HexadecimalToLong(secondHexString);
+                    if (secondHexString == "Y")
+                    {
+                        repeat = false;
+                        break;
+                    }
 
-                    string binarySecondString = BinaryValue(num2);
+                    string binarySecondString = HexadecimalToLong(secondHexString);
+
+                    //string binarySecondString = BinaryValue(num2);
 
                     Print(binarySecondString,65);
 
@@ -40,9 +46,9 @@
 
                         string thirdHexString = Console.ReadLine()!.Replace(" ", "");
 
-                        ulong num3 = HexadecimalToLong(secondHexString);
+                        string binaryThirdString = HexadecimalToLong(secondHexString);
 
-                        string binaryThirdString = BinaryValue(num2);
+                        //string binaryThirdString = BinaryValue(num2);
 
                         Print(binaryThirdString,129);
 
@@ -58,34 +64,42 @@
                 }
             }
 
-            string BinaryValue(ulong num)
+            //string BinaryValue(ulong num)
+            //{
+            //    try
+            //    {
+            //        return Convert.ToString((long)num, 2).PadLeft(64, '0');
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine(ex.Message);
+            //    }
+
+            //     return String.Empty;
+                
+            //}
+
+
+            string HexadecimalToLong(string num)
             {
                 try
                 {
-                    return Convert.ToString((long)num, 2).PadLeft(64, '0');
+                    string binaryString = String.Join(String.Empty,
+                                                  num.Select(
+                            c => Convert.ToString(Convert.ToInt32(c.ToString(), 16), 2).PadLeft(4, '0')
+                    ));
+
+                    return binaryString;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    Environment.Exit(1);
                 }
 
                 return String.Empty;
-                
-            }
+                      
 
-            ulong HexadecimalToLong(string num)
-            {
-                try
-                {
-                    return ulong.Parse(num, System.Globalization.NumberStyles.AllowHexSpecifier);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-                return 0;
-                
             }
 
             void Print(string binaryString,int offset)
@@ -102,15 +116,18 @@
                 }
             }
 
-            void Exit()
+            bool Exit()
             {
-                Console.Write("Do you want to enter another value? (Y/N): ");
+                Console.WriteLine("Do you want to enter another value? (Y/N): ");
                 string response = Console.ReadLine()?.Trim().ToUpper();
 
                 if (response != "Y")
                 {
                     repeat = false;
+                    return repeat;
                 }
+
+                return repeat;
             }
 
         }
